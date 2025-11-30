@@ -1,0 +1,6 @@
+# Gemini Agent Development Kit and core dependencies
+google-adk
+google-genai
+pydantic
+# Other standard libraries used in the notebook
+asyncio
