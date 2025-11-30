@@ -39,7 +39,7 @@ This structure allows the complex multi-agent quiz flow to run successfully whil
 | :--- | :--- | :--- | :--- |
 | **1. Planner Agent** | Scheduler & Data Retrieval. Calls the `fetch_next_fact` tool to identify the next topic for review based on the simulated confidence score. | `gemini-2.5-flash-lite` | Outputs: `fact_data` (Fact, Confidence, Last Reviewed Date) |
 | **2. Examiner Agent** | Quiz Master. Takes the `fact_data` and generates a single, challenging, open-ended question that requires deep conceptual understanding. | `gemini-2.5-flash-lite` | Input: `fact_data` |
-| **3. Judge Agent** | Qualitatively grades the user's open-ended answer against the original fact. This is the LLM-as-a-Judge component, running the most complex reasoning task. | `Gemini 2.5 Pro` (Recommended for high-reasoning judge tasks) | Inputs: `fact_data`, User's Answer |
+| **3. Judge Agent** | Qualitatively grades the user's open-ended answer against the original fact. This is the LLM-as-a-Judge component, running the most complex reasoning task. | `Gemini 2.5 Pro` (Recommended for high-reasoning judge tasks) | Inputs: `fact_data`, User's Answer | 
 | **4. Tutor Agent** | Feedback & Memory Update. Provides detailed, encouraging feedback based on the Judge's grade. Critically, it then updates the memory service with the new confidence score, closing the adaptive learning loop. | `gemini-2.5-flash-lite` + Google Search Tool | Inputs: `fact_data`, User's Answer, Judge's Grade |
 
 ***
@@ -49,4 +49,5 @@ This structure allows the complex multi-agent quiz flow to run successfully whil
 This architecture is ideal for the Agent-to-Agent (A2A) Protocol model:
 
 * **Memory Extraction Service:** The `PlannerAgent` and the underlying `MockMemoryService` could be deployed as a dedicated microservice. Other learning apps could call this service to request the next fact due for review.
+
 * **Assessment Service:** The `ExaminerAgent` and the `JudgeAgent` could be combined into a separate, stateless assessment service, offering "Concept Assessment" to other applications by taking a fact and a user\_response and returning a grade and feedback. This separation allows the high-reasoning Judge model to scale independently.
